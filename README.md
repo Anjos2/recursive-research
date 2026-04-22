@@ -1,227 +1,268 @@
 # recursive-research
 
-> Skill para [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) que **investiga recursivamente cualquier tema hasta nivel PhD** — ciencia, arte, negocio, humanidades, tecnología. Con tiering de fuentes confiables, loop auto-regulado, checkpointing a disco y WDM + Inversión Munger para decisiones autónomas.
+> Claude Code **plugin & skill** for recursive research up to PhD level on any topic — science, tech, business, arts, humanities. Source tiering, loop auto-regulation, disk checkpointing, and WDM + Munger inversion for autonomous decisions.
 
-**Versión:** 2.0.0 · **Licencia:** [MIT](LICENSE) · **Autor:** Joseph Huayhualla ([@anjos2](https://github.com/anjos2))
-
----
-
-## Qué hace
-
-Le das una **semilla de investigación** (un tema) y la skill:
-
-1. Te pregunta modo (`web` / `local` / `mixto`), rutas locales si aplica, fuentes a priorizar/excluir, y tope de ciclos.
-2. Identifica **3-5 hilos semilla** aplicando [WDM (Weighted Decision Matrix) + Inversión Munger](#wdm--inversión-munger).
-3. Detecta qué MCPs tienes (Firecrawl, Context7, WebFetch, etc.) y los prioriza por velocidad y calidad.
-4. **Itera en ciclos auto-regulados** — cada ciclo elige el hilo con menor cobertura, selecciona fuentes, investiga, consolida.
-5. Clasifica fuentes en **Tier 1 / 2 / 3 / Rechazo** con criterios transparentes.
-6. Guarda **checkpoints a disco** en cada ciclo — sobrevive al context compact.
-7. Cierra cuando se cumplen los **5 criterios de nivel PhD** o cuando alcanza el tope.
-8. Te pregunta si quieres seguir. **La investigación puede ser infinita.**
+**Version:** 2.0.0 · **License:** [MIT](LICENSE) · **Author:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
 
 ---
 
-## Por qué es distinta
+## What it does
 
-| Característica | Cómo lo resuelve |
+You give it a **research seed** (a topic) and the skill:
+
+1. Asks for mode (`web` / `local` / `mixed`), local paths if applicable, priority/excluded sources, and a cycle cap.
+2. Identifies **3-5 seed threads** applying [WDM (Weighted Decision Matrix) + Munger Inversion](#wdm--munger-inversion).
+3. Detects available MCPs (Firecrawl, Context7, WebFetch, WebSearch) and prioritizes by speed and quality.
+4. **Iterates in auto-regulated cycles** — each cycle picks the least-covered thread, selects sources, investigates, consolidates.
+5. Tiers every source into **Tier 1 / 2 / 3 / Rejected** with transparent criteria.
+6. Saves **disk checkpoints** every cycle — survives context compaction.
+7. Closes when the **5-criteria PhD fitness function** is met, or upon hitting the cycle cap.
+8. Asks if you want to keep going. **Research can be infinite.**
+
+---
+
+## Why it's different
+
+| Feature | How it solves it |
 |---|---|
-| Funciona en **cualquier dominio** | Tiering de fuentes genérico (papers, libros académicos, archivos oficiales, datos crudos), no code-only |
-| **Rechaza fuentes basura** automáticamente | Criterios explícitos: sin autor, marketing sin datos, spam SEO, contenido AI sin supervisión |
-| **Sobrevive límites de contexto** | Checkpoint a disco cada ciclo + modo `--resume` para continuar en sesión nueva |
-| **Auto-crítica** | Inversión Munger aplicada al conocimiento: ¿qué no sé? ¿qué sesgo tienen mis fuentes? ¿qué falta? |
-| **Pregunta antes de asumir** | Fase 0 completa de interrogación al usuario |
-| **Transparente** | Toda decisión autónoma no trivial aplica WDM + Munger y lo muestra |
+| Works across **any domain** | Generic source tiering (papers, academic books, official archives, raw data), not code-only |
+| **Rejects garbage sources** automatically | Explicit criteria: no author, data-less marketing, SEO spam, unsupervised AI content |
+| **Survives context limits** | Per-cycle disk checkpoint + `--resume` mode for new sessions |
+| **Self-critical** | Munger inversion applied to the consolidated knowledge: what do I not know? what bias do my sources share? what's missing? |
+| **Asks before assuming** | Full Phase 0 interrogation of the user |
+| **Transparent** | Every non-trivial autonomous decision runs WDM + Munger and shows the reasoning |
 
 ---
 
-## Instalación
+## Installation
 
-### Como skill global de Claude Code
+The repo ships as a **Claude Code plugin** (canonical format) that can also be installed as a standalone skill.
+
+### Option A — As a plugin (recommended)
+
+Gives you namespaced invocation (`/recursive-research:recursive-research`) and shows up in `/plugin` management.
 
 **Linux / macOS:**
 
 ```bash
-git clone https://github.com/anjos2/recursive-research.git
-mkdir -p ~/.claude/skills/recursive-research
-cp recursive-research/skill.md ~/.claude/skills/recursive-research/
+git clone https://github.com/Anjos2/recursive-research.git
+mkdir -p ~/.claude/plugins/recursive-research
+cp -r recursive-research/.claude-plugin recursive-research/skills ~/.claude/plugins/recursive-research/
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-git clone https://github.com/anjos2/recursive-research.git
-New-Item -ItemType Directory -Force -Path "$HOME/.claude/skills/recursive-research"
-Copy-Item recursive-research/skill.md "$HOME/.claude/skills/recursive-research/"
+git clone https://github.com/Anjos2/recursive-research.git
+New-Item -ItemType Directory -Force -Path "$HOME/.claude/plugins/recursive-research"
+Copy-Item -Recurse recursive-research/.claude-plugin,recursive-research/skills "$HOME/.claude/plugins/recursive-research/"
 ```
 
-### Como skill local al proyecto
+Verify with `/plugin` inside Claude Code — you should see `recursive-research` listed.
+
+### Option B — As a standalone skill (minimal)
+
+Only the skill markdown. Invoked without namespace as `/recursive-research`.
+
+**Linux / macOS:**
 
 ```bash
-git clone https://github.com/anjos2/recursive-research.git
-mkdir -p tu-proyecto/.claude/skills/recursive-research
-cp recursive-research/skill.md tu-proyecto/.claude/skills/recursive-research/
+git clone https://github.com/Anjos2/recursive-research.git
+mkdir -p ~/.claude/skills/recursive-research
+cp recursive-research/skills/recursive-research/SKILL.md ~/.claude/skills/recursive-research/
 ```
 
-Verifica con `/help` dentro de Claude Code que la skill aparece.
+**Windows (PowerShell):**
 
----
-
-## Uso
-
-### Invocación normal
-
-```
-/recursive-research
+```powershell
+git clone https://github.com/Anjos2/recursive-research.git
+New-Item -ItemType Directory -Force -Path "$HOME/.claude/skills/recursive-research"
+Copy-Item recursive-research/skills/recursive-research/SKILL.md "$HOME/.claude/skills/recursive-research/"
 ```
 
-La skill te guía preguntando. Respondes con lenguaje natural.
+Verify with `/help` inside Claude Code.
 
-### Reanudar investigación pausada
+### Future: official Plugin Directory
 
-```
-/recursive-research --resume <slug>
-```
-
-`<slug>` = nombre kebab-case del tema (ej: `memoria-episodica-humanos`).
-
-### Listar investigaciones guardadas
+Once approved in the official [Claude Code Plugin Directory](https://claude.com/plugins), install will be a single line:
 
 ```
-/recursive-research --list
+/plugin install recursive-research
 ```
 
 ---
 
-## Ejemplos de uso por dominio
+## Usage
 
-| Dominio | Semilla sugerida |
+### Standard invocation
+
+```
+/recursive-research:recursive-research     # if installed as plugin
+/recursive-research                        # if installed as standalone skill
+```
+
+The skill guides you interactively. Answer in natural language.
+
+### Resume a paused research
+
+```
+/recursive-research:recursive-research --resume <slug>
+```
+
+`<slug>` = kebab-case name of the topic (e.g., `episodic-memory-humans`).
+
+### List saved research
+
+```
+/recursive-research:recursive-research --list
+```
+
+---
+
+## Usage examples by domain
+
+| Domain | Suggested seed |
 |---------|------------------|
-| Neurociencia | "Mecanismos de la memoria episódica en humanos" |
-| Filosofía | "Aplicación moderna de la filosofía estoica" |
-| Música | "Minimalismo en la música del siglo XX" |
-| Negocio | "Modelos de monetización SaaS B2B en 2025" |
-| Historia | "Caída del imperio romano de occidente: causas económicas" |
-| Biología | "Inmunoterapia con células CAR-T contra cáncer" |
-| Tecnología | "Arquitectura hexagonal en microservicios" |
-| Derecho | "Regulación europea de IA (AI Act) y su impacto extraterritorial" |
+| Neuroscience | "Mechanisms of episodic memory in humans" |
+| Philosophy | "Modern application of Stoic philosophy" |
+| Music | "Minimalism in 20th-century music" |
+| Business | "B2B SaaS monetization models in 2025" |
+| History | "Fall of the Western Roman Empire: economic causes" |
+| Biology | "CAR-T cell immunotherapy against cancer" |
+| Technology | "Hexagonal architecture in microservices" |
+| Law | "European AI Act and its extraterritorial impact" |
 
 ---
 
-## Criterio de "nivel PhD"
+## "PhD level" criterion
 
-La skill declara PhD solo cuando se cumplen **los 5 criterios**:
+The skill only declares PhD when **all 5 criteria** are met:
 
-1. **Cobertura ≥80%** en todos los hilos semilla
-2. **≥3 fuentes Tier-1 por hilo**
-3. **Saturación de hallazgos nuevos ≤5%** durante 3 ciclos consecutivos
-4. **Inversión Munger aplicada** al conocimiento (qué no sé, qué contradicen las fuentes, qué sesgos hay)
-5. **≥3 conexiones cruzadas** explícitas entre hilos diferentes
+1. **Coverage ≥80%** across all seed threads
+2. **≥3 Tier-1 sources per thread**
+3. **New-finding saturation ≤5%** for 3 consecutive cycles
+4. **Munger inversion applied** to the knowledge (what I don't know, what sources contradict, what biases exist)
+5. **≥3 explicit cross-thread connections** between different threads
 
-Si algún criterio falla, **no declara PhD** y sigue iterando — o pide confirmación al alcanzar el tope de ciclos (default 20, configurable).
-
----
-
-## Tiering de fuentes
-
-| Tier | Qué califica | Peso en WDM |
-|------|--------------|-------------|
-| **1** | Papers peer-reviewed · libros académicos · estándares oficiales (W3C, RFC, ISO, WHO) · archivos primarios · datos oficiales | 5 |
-| **2** | Repos oficiales · blogs de autores citables · conferencias grabadas · Wikipedia con referencias · reportes con metodología | 3 |
-| **3** | Blogs con citaciones a T1/T2 · foros con voto alto y fuentes · entrevistas con expertos identificables | 2 |
-| **Rechazo** | Sin autor · marketing sin datos · agregadores spam · tutoriales sin fuentes · contenido AI sin supervisión | 0 |
-
-Cada fuente consultada se registra en un archivo por tier para auditoría posterior.
+If any criterion fails, it **does not declare PhD** and keeps iterating — or asks for confirmation upon hitting the cycle cap (default 20, configurable).
 
 ---
 
-## Fuentes semilla pre-cargadas
+## Source tiering
 
-La skill sugiere automáticamente fuentes confiables por dominio. Algunas:
+| Tier | Qualifies | WDM weight |
+|------|-----------|------------|
+| **1** | Peer-reviewed papers · academic books · official standards (W3C, RFC, ISO, WHO) · primary archives · official datasets | 5 |
+| **2** | Official repos · blogs from citable authors · recorded conferences · Wikipedia with references · reports with methodology | 3 |
+| **3** | Blogs with citations to T1/T2 · high-voted forum answers with sources · recorded interviews with identifiable experts | 2 |
+| **Reject** | No author · data-less marketing · SEO spam · tutorials without sources · unsupervised AI content | 0 |
 
-- **Ciencia**: arXiv, Semantic Scholar, Google Scholar, Connected Papers, OpenReview
-- **Medicina**: PubMed, Cochrane Library, WHO, ClinicalTrials.gov
-- **Humanidades**: JSTOR, SSRN, Project MUSE
-- **Código**: GitHub, Context7, RFCs, W3C specs
-- **Datos**: Banco Mundial, OECD Data, Our World in Data, Pew Research
-- **Arte/cultura**: Europeana, Google Arts & Culture, Internet Archive, Project Gutenberg
-
-El usuario puede añadir o rechazar cualquiera antes de arrancar.
+Every consulted source is logged in a per-tier file for later audit.
 
 ---
 
-## WDM + Inversión Munger
+## Pre-loaded seed sources
 
-Frameworks de decisión aplicados en cada paso autónomo no trivial:
+The skill auto-suggests reliable sources by domain. Examples:
 
-- **WDM (Weighted Decision Matrix)** — enumerar 3+ alternativas viables, criterios con peso, scoring 1-5, total comparado.
-- **Inversión Munger** (Charlie Munger vía Jacobi) — preguntar invertido sobre la opción ganadora: *"¿cómo fallaría? ¿qué sesgo tiene? ¿qué estoy ignorando?"*
+- **Science**: arXiv, Semantic Scholar, Google Scholar, Connected Papers, OpenReview
+- **Medicine**: PubMed, Cochrane Library, WHO, ClinicalTrials.gov
+- **Humanities**: JSTOR, SSRN, Project MUSE
+- **Code**: GitHub, Context7, RFCs, W3C specs
+- **Data**: World Bank, OECD Data, Our World in Data, Pew Research
+- **Art/culture**: Europeana, Google Arts & Culture, Internet Archive, Project Gutenberg
 
-La skill aplica ambos para:
-- Elegir hilos semilla
-- Seleccionar fuentes por ciclo
-- Decidir cuándo cerrar la investigación
-- Validar el conocimiento consolidado al final
-
-Referencia: [ensayo de Charlie Munger sobre inversión mental](https://fs.blog/inversion/).
+The user can add or reject any before starting.
 
 ---
 
-## MCPs recomendados
+## WDM + Munger inversion
 
-La skill detecta cuáles tienes y los usa en este orden:
+Decision frameworks applied at each non-trivial autonomous step:
 
-1. **[Firecrawl MCP](https://github.com/mendableai/firecrawl-mcp-server)** (muy recomendado) — scraping optimizado para IA
-2. **[Context7 MCP](https://github.com/upstash/context7)** — docs oficiales de librerías
-3. **WebSearch + WebFetch** (built-in de Claude Code) — fallback universal
-4. **Chrome DevTools MCP** — solo si el contenido requiere ejecución JS real; en general **demasiado lento** para investigación a escala
+- **WDM (Weighted Decision Matrix)** — enumerate 3+ viable alternatives, criteria with weights, 1-5 scoring, compared totals.
+- **Munger inversion** (Charlie Munger via Jacobi) — ask inverted about the winning option: *"how would it fail? what bias does it have? what am I ignoring?"*
+
+The skill applies both to:
+- Select seed threads
+- Select sources per cycle
+- Decide when to close the research
+- Validate the consolidated knowledge at the end
+
+Reference: [Charlie Munger's essay on mental inversion](https://fs.blog/inversion/).
 
 ---
 
-## Archivos que genera
+## Recommended MCPs
 
-En `memoria/investigaciones/<slug>/` del proyecto activo:
+The skill detects what you have and uses them in this order:
+
+1. **[Firecrawl MCP](https://github.com/mendableai/firecrawl-mcp-server)** (highly recommended) — AI-optimized scraping
+2. **[Context7 MCP](https://github.com/upstash/context7)** — official library docs
+3. **WebSearch + WebFetch** (built-in Claude Code) — universal fallback
+4. **Chrome DevTools MCP** — only when content requires real JS execution; generally **too slow** for large-scale research
+
+---
+
+## Generated files
+
+In `memoria/investigaciones/<slug>/` of the active project:
 
 - `estado.md` · `hilos.md` · `hallazgos.md`
 - `fuentes-tier-1.md` · `fuentes-tier-2.md` · `fuentes-tier-3.md` · `fuentes-rechazadas.md`
 - `ciclo-01.md`, `ciclo-02.md`, ..., `ciclo-N.md` (checkpoints)
-- `sintesis.md` · `acciones.md` · `gaps.md` (al cerrar)
+- `sintesis.md` · `acciones.md` · `gaps.md` (upon closing)
 
-**Si `memoria/` no existe en el proyecto, la skill la crea** avisando al usuario — es una dependencia explícita.
-
----
-
-## Contribuir
-
-Issues y PRs bienvenidos. Si mejoras un criterio, añades un tier, encuentras un anti-pattern nuevo o quieres soporte para más dominios: abre un PR.
-
-### Roadmap de ideas futuras
-
-- [ ] Integración nativa con gestores de referencias (Zotero, Mendeley)
-- [ ] Export de la investigación a formatos académicos (LaTeX, BibTeX)
-- [ ] Modo colaborativo — múltiples agentes investigando hilos en paralelo
-- [ ] Métricas de calidad de fuente automáticas (h-index, journal impact factor)
-- [ ] Soporte para PDFs académicos protegidos tras paywalls legales
+**If `memoria/` doesn't exist in the project, the skill creates it** (notifying the user) — it's an explicit dependency.
 
 ---
 
-## Topics sugeridos para GitHub
+## Repository structure
 
-Al crear el repo, añade estos topics para discoverability:
-
-`claude-code` · `claude-code-skill` · `ai-agent` · `research-tool` · `recursive-research` · `knowledge-management` · `weighted-decision-matrix` · `mental-models`
+```
+recursive-research/
+├── .claude-plugin/
+│   └── plugin.json                     ← plugin manifest
+├── skills/
+│   └── recursive-research/
+│       └── SKILL.md                    ← the skill instructions (the actual content)
+├── LICENSE                             ← MIT
+├── README.md                           ← this file
+└── .gitignore
+```
 
 ---
 
-## Licencia
+## Contributing
 
-[MIT](LICENSE) — úsala, modifícala, distribúyela. Solo mantén el aviso de copyright.
+Issues and PRs welcome. If you improve a criterion, add a tier, find a new anti-pattern, or want support for more domains: open a PR.
+
+### Roadmap
+
+- [ ] Native integration with reference managers (Zotero, Mendeley)
+- [ ] Export research to academic formats (LaTeX, BibTeX)
+- [ ] Collaborative mode — multiple agents investigating threads in parallel
+- [ ] Automatic source-quality metrics (h-index, journal impact factor)
+- [ ] Support for PDFs behind legal paywalls
 
 ---
 
-## Agradecimientos
+## GitHub topics
 
-- **Charlie Munger** — por "Invert, always invert" (vía Carl Jacobi)
-- **Claude Code team** — por el formato de skills
-- **Anthropic** — por el modelo que hace esto posible
+`claude-code` · `claude-code-skill` · `claude-code-plugin` · `ai-agent` · `research-tool` · `recursive-research` · `knowledge-management` · `weighted-decision-matrix` · `mental-models`
 
-Si esta skill te fue útil, considera darle ⭐ al repo.
+---
+
+## License
+
+[MIT](LICENSE) — use, modify, distribute freely. Just keep the copyright notice.
+
+---
+
+## Acknowledgments
+
+- **Charlie Munger** — for "Invert, always invert" (via Carl Jacobi)
+- **Claude Code team** — for the skill and plugin format
+- **Anthropic** — for the model that makes this possible
+
+If this skill was useful, consider giving the repo a ⭐.
