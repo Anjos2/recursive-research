@@ -2,7 +2,7 @@
 
 > Claude Code **plugin & skill** for recursive research up to PhD level on any topic — science, tech, business, arts, humanities. Source tiering, loop auto-regulation, disk checkpointing, and WDM + Munger inversion for autonomous decisions.
 
-**Version:** 2.0.0 · **License:** [MIT](LICENSE) · **Author:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
+**Version:** 2.1.0 · **License:** [MIT](LICENSE) · **Author:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
 
 ---
 
