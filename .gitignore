@@ -1,39 +1,23 @@
-# Investigaciones generadas por la skill (privadas por defecto)
+# Skill-generated research folders (user's local work — never commit)
 memoria/
-memoria-investigaciones/
 investigaciones/
 
-# Secretos — NUNCA commitear
+# Defensive: accidental credential leaks
 .env
 .env.*
-*.key
-*.pem
-*.pfx
 apikey*
 *token*
 *password*
 *secret*
 *credential*
 
-# Editores
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
+# OS junk
 .DS_Store
 Thumbs.db
 Desktop.ini
-$RECYCLE.BIN/
 
-# Logs
-*.log
-logs/
-
-# Artefactos temporales
-tmp/
-temp/
-*.tmp
-*.bak
+# Editor junk
+.vscode/
+.idea/
+*.swp
+*~
