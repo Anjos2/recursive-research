@@ -2,7 +2,7 @@
 
 > Claude Code **plugin & skill** for recursive research up to PhD level on any topic — science, tech, business, arts, humanities. Source tiering, loop auto-regulation, disk checkpointing, and WDM + Munger inversion for autonomous decisions.
 
-**Version:** 2.1.0 · **License:** [MIT](LICENSE) · **Author:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
+**Version:** 2.2.0 · **License:** [MIT](LICENSE) · **Author:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
 
 ---
 
@@ -36,40 +36,37 @@ You give it a **research seed** (a topic) and the skill:
 
 ## Installation
 
-The repo ships as a **Claude Code plugin** (canonical format) that can also be installed as a standalone skill.
+This repo is a **Claude Code marketplace** containing one plugin (`recursive-research`). The easiest way to install is through Claude Code's built-in plugin manager.
 
-### Option A — As a plugin (recommended)
+### Option A — Via marketplace (recommended)
 
-Gives you namespaced invocation (`/recursive-research:recursive-research`) and shows up in `/plugin` management.
+Inside Claude Code, run:
 
-**Linux / macOS:**
-
-```bash
-git clone https://github.com/Anjos2/recursive-research.git
-mkdir -p ~/.claude/plugins/recursive-research
-cp -r recursive-research/.claude-plugin recursive-research/skills ~/.claude/plugins/recursive-research/
+```
+/plugin marketplace add Anjos2/recursive-research
+/plugin install recursive-research
 ```
 
-**Windows (PowerShell):**
+The plugin appears in `/plugin` → Installed. Invoke it with `/recursive-research:recursive-research`.
 
-```powershell
-git clone https://github.com/Anjos2/recursive-research.git
-New-Item -ItemType Directory -Force -Path "$HOME/.claude/plugins/recursive-research"
-Copy-Item -Recurse recursive-research/.claude-plugin,recursive-research/skills "$HOME/.claude/plugins/recursive-research/"
+### Option B — Via the official Plugin Directory (pending approval)
+
+Anthropic maintains a [central Plugin Directory](https://claude.com/plugins). Once approved there (submission in progress), install becomes a one-liner without the marketplace add step:
+
+```
+/plugin install recursive-research
 ```
 
-Verify with `/plugin` inside Claude Code — you should see `recursive-research` listed.
+### Option C — As a standalone skill (minimal, no plugin manager)
 
-### Option B — As a standalone skill (minimal)
-
-Only the skill markdown. Invoked without namespace as `/recursive-research`.
+If you prefer to bypass the plugin ecosystem, copy only the skill markdown:
 
 **Linux / macOS:**
 
 ```bash
 git clone https://github.com/Anjos2/recursive-research.git
 mkdir -p ~/.claude/skills/recursive-research
-cp recursive-research/skills/recursive-research/SKILL.md ~/.claude/skills/recursive-research/
+cp recursive-research/plugins/recursive-research/skills/recursive-research/SKILL.md ~/.claude/skills/recursive-research/
 ```
 
 **Windows (PowerShell):**
@@ -77,18 +74,10 @@ cp recursive-research/skills/recursive-research/SKILL.md ~/.claude/skills/recurs
 ```powershell
 git clone https://github.com/Anjos2/recursive-research.git
 New-Item -ItemType Directory -Force -Path "$HOME/.claude/skills/recursive-research"
-Copy-Item recursive-research/skills/recursive-research/SKILL.md "$HOME/.claude/skills/recursive-research/"
+Copy-Item recursive-research/plugins/recursive-research/skills/recursive-research/SKILL.md "$HOME/.claude/skills/recursive-research/"
 ```
 
-Verify with `/help` inside Claude Code.
-
-### Future: official Plugin Directory
-
-Once approved in the official [Claude Code Plugin Directory](https://claude.com/plugins), install will be a single line:
-
-```
-/plugin install recursive-research
-```
+Invoked without namespace as `/recursive-research`. Verify with `/help` inside Claude Code.
 
 ---
 
@@ -220,14 +209,19 @@ In `memoria/investigaciones/<slug>/` of the active project:
 ## Repository structure
 
 ```
-recursive-research/
+recursive-research/                              ← the repo is a Claude Code marketplace
 ├── .claude-plugin/
-│   └── plugin.json                     ← plugin manifest
-├── skills/
-│   └── recursive-research/
-│       └── SKILL.md                    ← the skill instructions (the actual content)
-├── LICENSE                             ← MIT
-├── README.md                           ← this file
+│   └── marketplace.json                        ← marketplace manifest (declares the plugin)
+├── plugins/
+│   └── recursive-research/                     ← the plugin (named same as the marketplace)
+│       ├── .claude-plugin/
+│       │   └── plugin.json                     ← plugin manifest
+│       └── skills/
+│           └── recursive-research/
+│               └── SKILL.md                    ← the skill instructions (the actual content)
+├── LICENSE                                      ← MIT
+├── README.md                                    ← this file
+├── PRIVACY.md                                   ← privacy policy (no data collection)
 └── .gitignore
 ```
 

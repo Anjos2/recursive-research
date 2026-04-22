@@ -1,6 +1,6 @@
 {
   "name": "recursive-research",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Recursive research up to PhD level across any domain (science, tech, business, arts, humanities). Source tiering, WDM + Munger inversion for autonomous decisions, disk checkpointing to survive context compaction.",
   "author": {
     "name": "Joseph Huayhualla"

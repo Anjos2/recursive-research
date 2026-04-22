@@ -1,6 +1,6 @@
 ---
 name: recursive-research
-version: 2.1.0
+version: 2.2.0
 author: Joseph Huayhualla (@Anjos2)
 license: MIT
 repository: https://github.com/Anjos2/recursive-research

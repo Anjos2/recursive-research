@@ -1,0 +1,21 @@
+{
+  "name": "recursive-research",
+  "owner": {
+    "name": "Joseph Huayhualla"
+  },
+  "metadata": {
+    "description": "Recursive research skill/plugin for Claude Code by Joseph Huayhualla (@Anjos2)",
+    "version": "2.2.0"
+  },
+  "plugins": [
+    {
+      "name": "recursive-research",
+      "source": "./plugins/recursive-research",
+      "description": "Recursive research up to PhD level across any domain (science, tech, business, arts, humanities). Source tiering, WDM + Munger inversion for autonomous decisions, and disk checkpointing to survive context compaction.",
+      "version": "2.2.0",
+      "homepage": "https://github.com/Anjos2/recursive-research",
+      "license": "MIT",
+      "strict": true
+    }
+  ]
+}
