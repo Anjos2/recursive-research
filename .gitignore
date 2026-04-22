@@ -1,0 +1,39 @@
+# Investigaciones generadas por la skill (privadas por defecto)
+memoria/
+memoria-investigaciones/
+investigaciones/
+
+# Secretos — NUNCA commitear
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+apikey*
+*token*
+*password*
+*secret*
+*credential*
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs
+*.log
+logs/
+
+# Artefactos temporales
+tmp/
+temp/
+*.tmp
+*.bak
