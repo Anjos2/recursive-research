@@ -1,9 +1,9 @@
 ---
 name: recursive-research
-version: 2.0.0
-author: Joseph Huayhualla (@anjos2)
+version: 2.1.0
+author: Joseph Huayhualla (@Anjos2)
 license: MIT
-repository: https://github.com/anjos2/recursive-research
+repository: https://github.com/Anjos2/recursive-research
 description: Investigación recursiva profunda con loop auto-regulado hasta nivel PhD. Aplicable a cualquier dominio (ciencia, tecnología, negocio, arte, humanidades). Usa WDM + Inversión Munger para decisiones autónomas, tiering de fuentes confiables, y checkpointing a disco para sobrevivir límites de contexto.
 ---
 
@@ -448,8 +448,8 @@ Skill: Confirmado.
 
 ## Autoría y licencia
 
-- **Autor:** Joseph Huayhualla ([@anjos2](https://github.com/anjos2))
+- **Autor:** Joseph Huayhualla ([@Anjos2](https://github.com/Anjos2))
 - **Licencia:** MIT — ver archivo `LICENSE` del repositorio
-- **Repositorio:** https://github.com/anjos2/recursive-research
+- **Repositorio:** https://github.com/Anjos2/recursive-research
 
 Contribuciones bienvenidas. Si detectas un anti-pattern no cubierto, una heurística mejor, o un criterio de PhD más robusto, abre un PR.
