@@ -253,6 +253,10 @@ Issues and PRs welcome. If you improve a criterion, add a tier, find a new anti-
 
 ---
 
+## Privacy
+
+`recursive-research` does not collect any user data. Everything runs locally on your machine. See [PRIVACY.md](PRIVACY.md) for the full policy.
+
 ## License
 
 [MIT](LICENSE) — use, modify, distribute freely. Just keep the copyright notice.
